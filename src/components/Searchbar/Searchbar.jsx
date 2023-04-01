@@ -1,52 +1,50 @@
 import React, { Component } from 'react';
-import style from '../style/styles.module.css';
-import { ImSearch } from 'react-icons/im';
+import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+import style from './Searchbar.module.css';
 
-class Searchbar extends Component {
+export default class Searchbar extends Component {
+  static defaultProps = {
+    onSearch: PropTypes.func.isRequired,
+  };
+
   state = {
-    searchImg: '',
+    searchRequest: '',
   };
 
-  hendleSubmit = e => {
-    e.preventDefault();
-    if (this.state.searchImg.trim() === '') {
-      return alert('write search inquiry');
+  handleRequestChange = event => {
+    this.setState({ searchRequest: event.currentTarget.value.toLowerCase() });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    if (this.state.searchRequest.trim() === '') {
+      return toast.warning('Search field is empty!');
     }
-    this.props.onSubmit(this.state.searchImg);
-    this.setState({ searchImg: '' });
-  };
-
-  handleName = ({ target }) => {
-    const { value } = target;
-    this.setState({ searchImg: value });
+    this.props.onSearch(this.state.searchRequest);
+    this.setState({ searchRequest: '' });
   };
 
   render() {
-    const { searchImg } = this.state;
-
     return (
       <header className={style.Searchbar}>
-        <form onSubmit={this.hendleSubmit} className={style.SearchForm}>
-          <button type="submit" className={style.SearchFormButton}>
-            <span className={style.SearchFormLabel}>
-              <ImSearch />
-            </span>
+        <form className={style.SearchForm} onSubmit={this.handleSubmit}>
+          <button type="submit" className={style.SearchForm_button}>
+            <span className={style.SearchForm_button_label}>Search</span>
           </button>
+
           <input
-            className={style.SearchFormInput}
+            className={style.SearchForm_input}
             type="text"
+            name="searchRequest"
+            value={this.state.searchRequest}
+            onChange={this.handleRequestChange}
             autoComplete="off"
             autoFocus
             placeholder="Search images and photos"
-            value={searchImg}
-            name="input"
-            onChange={this.handleName}
-            required
           />
         </form>
       </header>
     );
   }
 }
-
-export default Searchbar;

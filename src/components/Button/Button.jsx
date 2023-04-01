@@ -1,12 +1,17 @@
-import React from 'react';
-import style from '../style/styles.module.css';
+import PropTypes from 'prop-types';
+import style from './Button.module.css';
 
-const ButtonLoadMore = ({ loader }) => {
+// Побудова кнопки Load more
+const Button = ({ loadMore }) => {
   return (
-    <button className={style.Button} onClick={() => loader()}>
-      Load More
+    <button type="button" onClick={loadMore} className={style.Button}>
+      Load more
     </button>
   );
 };
 
-export default ButtonLoadMore;
+Button.propTypes = {
+  loadMore: PropTypes.func.isRequired,
+};
+
+export default Button;
